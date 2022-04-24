@@ -19,7 +19,7 @@
 - セーブとクリアボタンの追をしたい
 - slackに書いた内容を投稿できるようにしたい
 
-[]
+[https://sshota-04.github.io/memo_pad/]
 
 
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>myMemoPad中級</title>
+  <link rel="stylesheet" href="css/sample.css">
+</head>
+
+<body>
+  <header>
+    <h1>MemoPad中級編</h1>
+  </header>
+
+  <main>
+    <input type="text" id="input">
+    <textarea id="text_area"></textarea>
+    <ul>
+      <li id="save">Save</li>
+      <li id="clear">Clear</li>
+    </ul>
+  </main>
+
+  <footer>
+    <small>G's</small>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    //複数セーブ（タイトル、本文）
+    $("#save").on("click", function(){
+      const data = {
+        title: $('#input').val(),
+        text: $('#text_area').val(),
+      };
+      console.log(data);
+      const JsonData = JSON.stringify(data);
+      console.log(JsonData);
+      localStorage.setItem("memo", JsonData);
+    });
+
+    //保存されている複数データを削除する
+    $("#clear").on('click', function(){
+      localStorage.removeItem('memo');
+      $('#input').val('');
+      $('#text_area').val('');
+    });
+
+    //読み込み時にデータを取得
+    if(localStorage.getItem('memo')){
+        const JsonData = localStorage.getItem('memo');
+        console.log(JsonData);
+        const data = JSON.parse(JsonData);
+        console.log(data);
+        $('#input').val(data.title);
+        $('#text_area').val(data.text);
+    };
+  </script>
+
+</body>
+
+</html>

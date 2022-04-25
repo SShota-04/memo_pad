@@ -18,48 +18,66 @@ function addNewNote(text = ''){
     const note = document.createElement('div');
     //noteクラスの追加
     note.classList.add('note');
-    console.log(note);
     //メモ帳追加
     note.innerHTML = `
     <div class="tools">
-        <button class="edit"><i class="fas fa-edit"></i></button>
-        <button class="delete"><i class="fas fa-trash-alt"></i></button>
+        <button class="text_save" id="text_save">save</button>
+        <button class="text_delete" id="text_delete">delete</button>
+        <!--<button class="edit"><i class="fas fa-edit"></i></button>-->
+        <button class="delete">trash</button>
     </div>
-    <div class="main ${text ? "" : "hidden"}"></div>
-    <textarea class="${text ? "hidden" : ""}"></textarea>
+    <!--<div class="main ${text ? "" : "hidden"}"></div>-->
+    <!--<textarea class="${text ? "hidden" : ""}"></textarea>-->
+    <textarea></textarea>
     `
-
-    console.log(note);
-
     //操作に必要な要素の取得
+    const textSave = note.querySelector('.text_save');
+    const textDelete = note.querySelector('.text_delete');
     const editBtn = note.querySelector('.edit');
     const deleteBtn = note.querySelector('.delete');
-    const main = note.querySelector('.main');
+    /*const main = note.querySelector('.main');*/
     const textArea = note.querySelector('textarea');
-
-    console.log(editBtn, deleteBtn, main, textArea);
 
     //テキストエリアにテキストを代入
     textArea.value = text;
     //marked HTMLに追加したプラグイン
     //main.innerHTML = marked(text);
 
-    console.log(textArea);
-    console.log(main);
     //削除ボタンのクリックイベント
     deleteBtn.addEventListener('click', () => {
         deleteNote(note);
     });
 
     //編集ボタンのクリックイベント
-    editBtn.addEventListener('click', () => {
+    /*editBtn.addEventListener('click', () => {
         editNote(main, textArea);
+    });*/
+
+    //テキストをローカルストレージに保存
+    textSave.addEventListener('click', () => {
+        //要素取得
+        const notesText = document.querySelectorAll('textarea');
+        const notes = [];
+
+        //要素を格納
+        notesText.forEach(note => notes.push(note.value));
+
+        //ローカルストレージに保存
+        const JsonData = JSON.stringify(notes);
+        localStorage.setItem('notes', JsonData);
+    });
+
+    //ローカルストレージを削除
+    textDelete.addEventListener('click', () => {
+         //メモ帳テキスト削除ボタン
+        localStorage.removeItem('notes');
+        $('textarea').val('');
     });
 
     //テキストエリアのイベント
     textArea.addEventListener('input', (e) => {
         const { value } = e.target;
-        main.innerHTML = marked(value);
+        //main.innerHTML = marked(value);
 
         //ローカルストレージの更新
         updateLS();
@@ -71,15 +89,6 @@ function addNewNote(text = ''){
 
     //ローカルストレージにメモ帳を保存
     function updateLS(){
-        //要素取得
-        const notesText = document.querySelectorAll('textarea');
-        const notes = [];
-
-        //要素を格納
-        notesText.forEach(note => notes.push(note.value));
-
-        //ローカルストレージに保存
-        localStorage.setItem('notes', JSON.stringify(notes));
     };
 
 
@@ -97,4 +106,5 @@ function addNewNote(text = ''){
         main.classList.toggle('hidden');
         textArea.classList.toggle('hidden');
     }
+    
     
